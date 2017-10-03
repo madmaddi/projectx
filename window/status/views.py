@@ -1,15 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
 from django.http import HttpResponse
+
+from sensor.DHTSensor import DHTSensor as Sensor
 
 # Create your views here.
 def index(request):
     return HttpResponse("index")
 
 def status(request, id):
-    return HttpResponse("status von %s" % id)
+    if ( id == "out"):
+        sensor = Sensor(14, 'DHT11', True)
+    else:
+        sensor = Sensor(15, 'DHT22', True)
+
+    sensor.readTemp()
+    return HttpResponse("temperatur %s = %f Grad" % (id, sensor.getTemperature()))
 
 def detail(request, question_id):
     return HttpResponse("You're looking at question %s." % question_id)
