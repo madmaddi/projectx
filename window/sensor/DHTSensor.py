@@ -3,8 +3,8 @@
 
 import RPi.GPIO as GPIO
 import Adafruit_DHT
-from time import gmtime, strftime
-
+#from time import gmtime, strftime
+import time, datetime
 
 class DHTSensor(object):
 
@@ -59,6 +59,7 @@ class DHTSensor(object):
                 self.debug('DHT%s - Fehler beim Auslesen... Starte neu ...' % self.sensorType)
                 time.sleep(2)  # sensor need some surcease
 
+        self.saveToFile()
         self.debug(self)
 
     """
@@ -77,6 +78,19 @@ class DHTSensor(object):
 
     def getTemperature(self):
         return self.currentTemp
+
+    def saveToFile(self):
+        f = open("/tmp/dht_%s.txt" % self.sensorType, "a")
+        ts = time.time()
+        st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+        f.write("%s#%f\n" % (st, self.currentTemp))
+        f.close()
+
+    def readFromFile(self):
+        f1 = open("/tmp/dht_%s.txt" % self.sensorType, "r")
+        last_line = f1.readlines()[-1]
+        f1.close()
+        return last_line
 
 if __name__ == '__main__':
     import time

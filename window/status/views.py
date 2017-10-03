@@ -16,7 +16,7 @@ def status(request, id):
         sensor = Sensor(15, 'DHT22', True)
 
     sensor.readTemp()
-    return HttpResponse("temperatur %s = %f Grad" % (id, sensor.getTemperature()))
+    return HttpResponse("temperatur %s => %s" % (id, sensor.readFromFile()))
 
 def detail(request, question_id):
     return HttpResponse("You're looking at question %s." % question_id)
