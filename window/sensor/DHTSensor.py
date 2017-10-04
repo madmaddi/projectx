@@ -88,6 +88,7 @@ class DHTSensor(object):
 
     def readFromFile(self):
         f1 = open("/tmp/dht_%s.txt" % self.sensorType, "r")
+        if f1 == None: return "nofile"
         last_line = f1.readlines()[-1]
         f1.close()
         return last_line

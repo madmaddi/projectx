@@ -4,7 +4,8 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^temp/(?P<id>[in|out]+)/$', views.status, name='status'),
+    url(r'^temp/(?P<id>[in|out]+)/$', views.status, name='statusTemp'),
+    url(r'^temp/(?P<id>[in|out]+)/window/(?P<action>[open|close]+)/$', views.status, name='actionWindow'),
     #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
     # ex: /polls/5/results/
     #url(r'^(?P<question_id>[0-9]+)/results/$', views.results, name='results'),

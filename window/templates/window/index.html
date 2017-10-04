@@ -1,0 +1,15 @@
+<h1>Temperatur 
+{% if wo %}
+{{ wo }} 
+{% endif %}
+</h1>
+{% if temp %}
+{{ temp }} C
+{% endif %}
+<h1>Fensterstatus</h1>
+offen/geschlossen
+
+<br/>
+<a href="{% url 'actionWindow' wo 'open' %}">Fenster auf</a>
+<br/>
+<a href="{% url 'actionWindow' wo 'close' %}">Fenster zu</a>
