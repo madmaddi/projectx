@@ -15,20 +15,29 @@ def index(request):
     return HttpResponse("index")
 
 def status(request, id = "", action =""):
+    # tmp
     if id == "out":
         sensor = Sensor(14, 'DHT11', True)
     else:
         sensor = Sensor(15, 'DHT22', True)
 
-    #sensor.readTemp()
-    lock = ThreadLock().getLock()
-    #lock = threading.Lock()
-    r = Relais(17, 22, lock, action)
-    r.start()
+    # relais
+    if action != "":
+        lock = ThreadLock().getLock()
+        r = Relais(17, 22, lock, action)
+        r.start()
+
+    # windowState
+    windowState = "unknown"
+    f = open("/tmp/windowStatus", "r")
+    if f:
+        windowState = f.readline();
+        f.close()
 
     context = {
-        'wo' : id,
-        'temp' : sensor.readFromFile()
+        'where' : id,
+        'temp' : sensor.readFromFile(),
+        'windowState': windowState
     }
     return render(request, 'templates/window/index.html', context)
     

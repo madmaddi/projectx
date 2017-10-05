@@ -44,20 +44,16 @@ class Relais(threading.Thread):
             self.switch(self.pin1)
         else:
             self.switch(self.pin2)
-
         print "     Beende %s" % self.name
 
     def switch(self, p):
         try:
             self.lock.acquire()
-            #self.stopAll()
-
-            GPIO.output(self.pin1, False) # stop all
-            GPIO.output(self.pin2, False) # stop all
-
+            self.stopAll()
             GPIO.output(p, True)  # connect through
             time.sleep(self.delay)  # wait n seconds
             GPIO.output(p, False)  # stop circuit connection
+            self.writeStatus(p)
             self.lock.release()
         except KeyboardInterrupt:
             raise
@@ -66,6 +62,13 @@ class Relais(threading.Thread):
 
         GPIO.output(p, False)
 
+
+    def writeStatus(self, p):
+        f = open("/tmp/windowStatus", "w")
+        status = "closed"
+        if ( p == 17): status = "open" # todo p == 17 not hardcoded
+        f.write(status)
+        f.close()
 
     def stopAll(self):
         try:
