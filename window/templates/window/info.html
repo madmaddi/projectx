@@ -1,0 +1,17 @@
+<h1>Info</h1>
+<h2>Temperatur Innen</h2>
+{% if tempIn %}
+{{ tempIn }}
+{% endif %}
+
+<h2>Temperatur Aussen</h2>
+{% if tempOut %}
+{{ tempOut }}
+{% endif %}
+
+<h2>Fensterstatus</h2>
+{{ windowState }} ... (aktualisieren button)
+<br/>
+<a href="% url 'actionWindow' where 'open' %}">Fenster auf</a>
+<br/>
+<a href="% url 'actionWindow' where 'close' %}">Fenster zu</a>
