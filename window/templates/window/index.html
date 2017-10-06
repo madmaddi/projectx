@@ -1,14 +1,16 @@
-<h1>Temperatur 
-{% if where %}
-{{ where }}
+<h1>Temperatur Innen</h1>
+{% if tempIn %}
+{{ tempIn }}
 {% endif %}
-</h1>
-{% if temp %}
-{{ temp }}
+
+<h1>Temperatur Aussen</h1>
+{% if tempOut %}
+{{ tempOut }}
 {% endif %}
+
 <h1>Fensterstatus</h1>
 {{ windowState }} ... (aktualisieren button)
 <br/>
-<a href="{% url 'actionWindow' where 'open' %}">Fenster auf</a>
+<a href="% url 'actionWindow' where 'open' %}">Fenster auf</a>
 <br/>
-<a href="{% url 'actionWindow' where 'close' %}">Fenster zu</a>
+<a href="% url 'actionWindow' where 'close' %}">Fenster zu</a>

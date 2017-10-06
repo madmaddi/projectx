@@ -19,6 +19,8 @@ class Singleton(type):
 class Relais(object):
     __metaclass__ = Singleton
 
+    FILEPATH = "/home/pi/"
+
     pin1 = 17
     pin2 = 22
     delay = 5
@@ -82,7 +84,9 @@ class Relais(object):
 
 
     def writeStatus(self, p):
-        f = open("/tmp/windowStatus", "w")
+        path = "%s./windowStatus" % self.FILEPATH
+        print path
+        f = open(path, "w")
         status = "closed"
         if ( p == 17): status = "open" # todo p == 17 not hardcoded
         f.write(status)

@@ -6,20 +6,8 @@ import Adafruit_DHT
 #from time import gmtime, strftime
 import time, datetime
 
-class Singleton(type):
-    def __init__(self, name, bases, dict):
-        super(Singleton, self).__init__(name, bases, dict)
-        self.instance = None
-
-    def __call__(self, *args, **kw):
-        if self.instance is None:
-            self.instance = super(Singleton, self).__call__(*args, **kw)
-
-        return self.instance
-
 class DHTSensor(object):
-    __metaclass__ = Singleton
-
+    FILEPATH = "/home/pi/"
     allowedSensorTypes  = ['DHT11', 'DHT22']
     sensorType          = 'DHT11'
     pin                 = 14
@@ -30,7 +18,6 @@ class DHTSensor(object):
     hasSensorReadError  = False
     tempDelta       = 0.5
     hasDeltaChange      = False
-    isRunning = False
 
     """
     """
@@ -61,17 +48,9 @@ class DHTSensor(object):
         self.currentHumidity = humidity
         self.hasSensorReadError = False
 
-
-    def run(self):
-        self.readTemp()
-
     """
     """
     def readTemp(self):
-        if self.isRunning: return
-        self.isRunning = True
-        #import time
-        #time.sleep(10)
         # try reading from sensor (max. 3 times)
         count = 0
         while count < 3 :
@@ -85,8 +64,6 @@ class DHTSensor(object):
 
         self.saveToFile()
         self.debug(self)
-
-        self.isRunning = False
 
     """
     """
@@ -111,14 +88,14 @@ class DHTSensor(object):
         return self.currentHumidity
 
     def saveToFile(self):
-        f = open("/tmp/dht_%s.txt" % self.sensorType, "a")
+        f = open("%s./dht_%s.txt" % (self.FILEPATH, self.sensorType), "a")
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         f.write("%s#%f#%f\n" % (st, self.currentTemp, self.currentHumidity))
         f.close()
 
     def readFromFile(self):
-        f1 = open("/tmp/dht_%s.txt" % self.sensorType, "r")
+        f1 = open("%s/dht_%s.txt" % (self.FILEPATH, self.sensorType), "r")
         if f1 == None: return "nofile"
         last_line = f1.readlines()[-1]
         f1.close()
