@@ -12,7 +12,15 @@ from Lock import *
 
 # Create your views here.
 def index(request):
-    return HttpResponse("index")
+    return status(request, "", "")
+
+def backgroundProcess(action):
+    print("process started %s" % action)
+    r = Relais(17, 22)
+    r.setAction(action)
+    print r
+    r.run()
+    print("process finished")
 
 def status(request, id = "", action =""):
     # tmp
@@ -23,9 +31,9 @@ def status(request, id = "", action =""):
 
     # relais
     if action != "":
-        lock = ThreadLock().getLock()
-        r = Relais(17, 22, lock, action)
-        r.start()
+        t = threading.Thread(target=backgroundProcess, args=(action,), kwargs={})
+        t.setDaemon(True)
+        t.start()
 
     # windowState
     windowState = "unknown"

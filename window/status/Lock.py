@@ -20,5 +20,3 @@ class ThreadLock(object):
     def getLock(self):
         return self.lock
 
-#print ThreadLock().getLock()
-#print ThreadLock().getLock()

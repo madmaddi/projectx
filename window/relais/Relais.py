@@ -3,23 +3,31 @@
 
 import RPi.GPIO as GPIO
 import time
-import threading
-import random
 
-class Relais(threading.Thread):
+class Singleton(type):
+    def __init__(self, name, bases, dict):
+        super(Singleton, self).__init__(name, bases, dict)
+        self.instance = None
+
+    def __call__(self, *args, **kw):
+        if self.instance is None:
+            self.instance = super(Singleton, self).__call__(*args, **kw)
+
+        return self.instance
+
+
+class Relais(object):
+    __metaclass__ = Singleton
+
     pin1 = 17
     pin2 = 22
     delay = 5
     isConnectedThrough = False
     hasError = False
-    type = "open"
+    action = "open"
+    isRunning = False
 
-    def __init__(self, pin1, pin2, lock, type = "open", delay = 2):
-        print lock
-        self.lock = lock
-        threading.Thread.__init__(self)
-        self.type = type
-
+    def __init__(self, pin1, pin2, delay = 10):
         if pin1 is None or pin2 is None:
             raise Exception('Pin required')
 
@@ -27,6 +35,9 @@ class Relais(threading.Thread):
         self.pin2 = pin2
         self.delay = delay
         self.initGPIO()
+
+    def setAction(self, action):
+        self.action = action
 
     def initGPIO(self):
         GPIO.setmode(GPIO.BCM)
@@ -38,29 +49,36 @@ class Relais(threading.Thread):
         GPIO.output(self.pin2, False)
 
     def run(self):
-        print "Starte %s" % self.name
-        #if (self.i * random.randint(0,100))  % 2 == 1:
-        if self.type == "open":
+        #print "Starte %s" % "self.name"
+        if self.action == "open":
             self.switch(self.pin1)
         else:
             self.switch(self.pin2)
-        print "     Beende %s" % self.name
+        #print "     Beende %s" % "self.name"
 
     def switch(self, p):
         try:
-            self.lock.acquire()
+            if self.isRunning:
+                #print "noch aktiv"
+                return
+
+            #print "läuft gerade"
+            self.isRunning = True
             self.stopAll()
             GPIO.output(p, True)  # connect through
             time.sleep(self.delay)  # wait n seconds
             GPIO.output(p, False)  # stop circuit connection
             self.writeStatus(p)
-            self.lock.release()
         except KeyboardInterrupt:
             raise
         except:
             GPIO.output(p, False)
+            self.isRunning = False
+
 
         GPIO.output(p, False)
+        self.isRunning = False
+        #print "     fertig"
 
 
     def writeStatus(self, p):
@@ -91,9 +109,7 @@ if __name__ == '__main__':
 
     arg1 = sys.argv[1]
 
-    lock = threading.Lock()
-
-    r = Relais(17, 22, lock, arg1)
+    r = Relais(17, 22, arg1)
     r.start()
     """
     l =[]
