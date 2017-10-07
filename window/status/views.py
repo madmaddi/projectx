@@ -9,6 +9,8 @@ from sensor.DHTSensor import DHTSensor as Sensor
 from relais.Relais import Relais
 import threading
 from Lock import *
+from django.utils import timezone
+from .models import Temperature
 
 FILEPATH = "/home/pi/"
 
@@ -32,16 +34,21 @@ def measure(request):
     
     sensorIn = Sensor(14, 'DHT11', True)
     sensorIn.readTemp()
+    
+    tIn = Temperature(temp_value=sensorIn.getTemperature(),temp_type="in",pub_date=timezone.now())
+    tIn.save()
+
+    tOut = Temperature(temp_value=sensorOut.getTemperature(),temp_type="out",pub_date=timezone.now())
+    tOut.save()
+
     return render(request, 'templates/window/measure.html', {})
 
 
 def info(request):
     # tmp
-    sensorOut = Sensor(15, 'DHT22')
-    sensorOut.readFromFile()
-    
-    sensorIn = Sensor(14, 'DHT11')
-    sensorIn.readFromFile()
+    all = Temperature.objects.all().order_by('-pub_date')
+    tempIn = Temperature.objects.filter(temp_type__lte='in').order_by('-pub_date')[0]
+    tempOut = Temperature.objects.filter(temp_type__lte='out').order_by('-pub_date')[0]
 
     # windowState
     windowState = "unknown"
@@ -52,8 +59,9 @@ def info(request):
 
     context = {
         'where' : id,
-        'tempOut' : sensorOut.readFromFile(),
-        'tempIn' : sensorIn.readFromFile(),
+        'entries': all,
+        'tempOut' : tempOut,
+        'tempIn' : tempIn,
         'windowState': windowState
     }
     return render(request, 'templates/window/info.html', context)

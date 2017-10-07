@@ -1,13 +1,20 @@
 <h1>Info</h1>
+
+
 <h2>Temperatur Innen</h2>
 {% if tempIn %}
-{{ tempIn }}
+    {{ tempIn.id }} # {{ tempIn.pub_date }} # {{ tempIn.temp_value }} # {{tempIn.temp_type}}
 {% endif %}
 
 <h2>Temperatur Aussen</h2>
 {% if tempOut %}
-{{ tempOut }}
+    {{ tempOut.id }} # {{ tempOut.pub_date }} # {{ tempOut.temp_value }} # {{tempOut.temp_type}}
 {% endif %}
+
+<h3>all entries</h3>
+{% for t in entries %}
+    <li>{{ t.id }} # {{ t.pub_date }} # {{ t.temp_value }} # {{t.temp_type}}</li>
+{% endfor %}
 
 <h2>Fensterstatus</h2>
 {{ windowState }} ... (aktualisieren button)

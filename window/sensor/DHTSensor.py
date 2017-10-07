@@ -62,7 +62,6 @@ class DHTSensor(object):
                 self.debug('DHT%s - Fehler beim Auslesen... Starte neu ...' % self.sensorType)
                 time.sleep(2)  # sensor need some surcease
 
-        self.saveToFile()
         self.debug(self)
 
     """
@@ -74,11 +73,11 @@ class DHTSensor(object):
     """
     """
     def __str__(self):
-        msg = ""
+        msg = "Read environment\n"
         msg += "\tSensorType: DHT-%s\n" % self.sensorType
         msg += "\tTemperature: %2.2f °C\n" % self.getTemperature()
         h = self.getHumidity() if self.getHumidity() != None else 0.0
-        #msg += "\tHumidity: %2.2f %\n" % h
+        msg += "\tHumidity: %2.2f \n" % h
         return msg
 
     def getTemperature(self):
@@ -88,18 +87,24 @@ class DHTSensor(object):
         return self.currentHumidity
 
     def saveToFile(self):
+        return
+        """
         f = open("%s./dht_%s.txt" % (self.FILEPATH, self.sensorType), "a")
         ts = time.time()
         st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         f.write("%s#%f#%f\n" % (st, self.currentTemp, self.currentHumidity))
         f.close()
+        """
 
     def readFromFile(self):
+        return "nix"
+        """
         f1 = open("%s/dht_%s.txt" % (self.FILEPATH, self.sensorType), "r")
         if f1 == None: return "nofile"
         last_line = f1.readlines()[-1]
         f1.close()
         return last_line
+        """
 
 if __name__ == '__main__':
     import time
