@@ -1,0 +1,173 @@
+swagger: "2.0"
+info:
+  description: "Projekt-X"
+  version: "1.0.0"
+  title: "Projekt-X"
+  license:
+    name: "Namensnennung-Nicht kommerziell 4.0 International"
+    url: "http://creativecommons.org/licenses/by-nc/4.0/"
+host: "192.168.20.226:8888"
+basePath: "/projectx"
+tags:
+- name: "window"
+  description: "Infos über den Fensterstatus"
+- name: "temp"
+  description: "Temperaturinfos, drinnen + draussen"
+schemes:
+- "http"
+paths:
+  /window:
+    get:
+      tags:
+      - "window"
+      summary: "Info zum Fensterstatus"
+      description: ""
+      operationId: "windowInfo"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+  /window/{action}:
+    get:
+      tags:
+      - "window"
+      summary: "Führt Fensteraktion aus"
+      description: "Mögliche Aktionen: open|close. Wird bereits eine Fensteraktion ausgeführt, hat die Anfrage keinen Effekt."
+      operationId: "windowAction"
+      produces:
+      - "application/json"
+      - "application/html"
+      parameters:
+      - name: "action"
+        in: "path"
+        description: "Durchzuführende Aktion"
+        required: true
+        type: "string"
+        enum:
+          - "open"
+          - "close"
+      responses:
+        200:
+          description: "Aktion wird durchgeführt."
+          schema:
+            $ref: "#/definitions/WindowStatus"
+        503:
+          description: "Service belegt."
+          schema:
+            $ref: "#/definitions/WindowStatus"
+
+  /temp:
+    get:
+      tags:
+      - "temp"
+      summary: "Temperatur Infos"
+      description: "Liefert Liste gespeicherter Temperatureinträge zurück. (alle!) "
+      operationId: "tempInfo"
+      produces:
+      - "application/json"
+      - "application/html"
+      parameters:
+      - name: "location"
+        in: "query"
+        description: "Sensor innen oder außen"
+        required: false
+        type: "string"
+        enum:
+          - "in"
+          - "out"
+      - name: "limit"
+        in: "query"
+        description: "Anzahl der Ergebnisse. Default = 2000"
+        required: false
+        type: integer
+      responses:
+        200:
+          description: "Aktion wird durchgeführt."
+          schema:
+            $ref: "#/definitions/TempList"
+        404:
+          description: "Not found."
+
+  /temp/{id}:
+    get:
+      tags:
+      - "temp"
+      summary: "Temperatur Infos"
+      description: "Liefert Infos zum konkreten Temperatureintrag zurück."
+      operationId: "tempInfoId"
+      produces:
+      - "application/json"
+      - "application/html"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: ""
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Not found."
+    put:
+      tags:
+      - "temp"
+      summary: "Temperatureintrag ändern"
+      description: ""
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID des Eintrags"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated object"
+        required: true
+        schema:
+          $ref: "#/definitions/Temperatur"
+      responses:
+        200:
+          description: "OK"
+    delete:
+      tags:
+      - "temp"
+      summary: "Temperatureintrag löschen"
+      description: ""
+      operationId: "deleteTemp"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Zu löschende ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+definitions:
+  TempList:
+    type: "array"
+    items:
+     $ref: "#/definitions/Temperatur"
+  Temperatur:
+    type: "object"
+    properties:
+      id:
+        type: integer
+      temp_value:
+        type: string
+      temp_type:
+        type: string
+  WindowStatus:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+      msg:
+        type: "string"

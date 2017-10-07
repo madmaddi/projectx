@@ -10,11 +10,11 @@ urlpatterns = [
 
     url(r'^info$', views.info, name='info'),
 
-    url(r'^temp/$', views.tempList, name='temp'),
-    url(r'^temp/(?P<key>[0-9]+)/$', views.tempDetail, name='temp'),
+    url(r'^temp$', views.tempList, name='temp'),
+    url(r'^temp/(?P<key>[0-9]+)$', views.tempDetail, name='temp'),
 
-    url(r'^window/$', views.windowState, name='windowStatus'),
-    url(r'^window/(?P<action>[open|close]+)/$', views.action, name='actionWindow'),
+    url(r'^window$', views.windowState, name='windowStatus'),
+    url(r'^window/(?P<action>[open|close]+)$', views.action, name='actionWindow'),
 
     ###
     url(r'^snippets/$', views.snippet_list),

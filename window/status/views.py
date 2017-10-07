@@ -37,14 +37,15 @@ def windowState(request):
 
 @api_view(['GET'])
 def tempList(request, key = None, format = None):
-    # if request.query_params.get('key') != None:
-    print request.query_params
+    limit =  request.query_params.get('limit')
+    if limit == None or limit == "": limit = 2000
+
     if request.method == 'GET':
         location = request.query_params.get('location')
         if location != None:
-            snippets = Temperature.objects.filter(temp_type=location).order_by('-pub_date')
+            snippets = Temperature.objects.filter(temp_type=location).order_by('-pub_date')[:limit]
         else:
-            snippets = Temperature.objects.order_by('-pub_date')
+            snippets = Temperature.objects.order_by('-pub_date')[:limit]
 
         serializer = TemperatureSerializer(snippets, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -100,7 +101,8 @@ def action(request, action = "" ):
             {
                 "status": "fail",
                 "msg" : "other action is in progress"
-            }
+            },
+            status=status.HTTP_503_SERVICE_UNAVAILABLE
         )
     else:
         resp = Response(
