@@ -51,20 +51,16 @@ class Relais(object):
         GPIO.output(self.pin2, False)
 
     def run(self):
-        #print "Starte %s" % "self.name"
         if self.action == "open":
             self.switch(self.pin1)
         else:
             self.switch(self.pin2)
-        #print "     Beende %s" % "self.name"
 
     def switch(self, p):
         try:
             if self.isRunning:
-                #print "noch aktiv"
                 return
 
-            #print "läuft gerade"
             self.isRunning = True
             self.stopAll()
             GPIO.output(p, True)  # connect through
@@ -80,8 +76,6 @@ class Relais(object):
 
         GPIO.output(p, False)
         self.isRunning = False
-        #print "     fertig"
-
 
     def writeStatus(self, p):
         path = "%s./windowStatus" % self.FILEPATH

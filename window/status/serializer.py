@@ -3,11 +3,12 @@ from rest_framework import serializers
 from .models import Temperature
 
 class TemperatureSerializer(serializers.Serializer):
+
     class Meta:
         model = Temperature
-        fields = ('id', 'temp_value', 'temp_type', 'linenos', 'language', 'style')
+        fields = ('id', 'temp_value', 'temp_type')
 
-    """
+
     id = serializers.IntegerField(read_only=True)
     temp_value = serializers.CharField(required=False, allow_blank=True, max_length=50)
     temp_type  = serializers.CharField(required=False, allow_blank=True, max_length=3)
@@ -31,4 +32,3 @@ class TemperatureSerializer(serializers.Serializer):
         instance.title = validated_data.get('pub_date', instance.pub_date)
         instance.save()
         return instance
-    """
