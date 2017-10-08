@@ -63,7 +63,7 @@ paths:
       - "environment"
       summary: "Umgebungs Infos"
       description: "Liefert alle gespeicherten Umgebungseinträge zurück. Limitierung via limit Parameter. Bsp: ./?limit=1&location=in liefert die aktuellen Infos zur Innenumgebung"
-      operationId: "tempInfo"
+      operationId: "environmentInfo"
       produces:
       - "application/json"
       - "application/html"
@@ -93,7 +93,7 @@ paths:
       tags:
         - "environment"
       summary: "führt eine Umgebungsmessung durch (innen + aussen)"
-      operationId: "measure"
+      operationId: "environmentMeasure"
       produces:
       - "application/json"
       - "application/html"
@@ -103,7 +103,7 @@ paths:
   /environment/{id}:
     get:
       tags:
-      - "environment"
+      - "environmentId"
       summary: "Umgebungs Infos"
       description: "Liefert Infos zum konkreten Umgebungseintrag zurück."
       operationId: "tempInfoId"
@@ -126,7 +126,7 @@ paths:
       - "environment"
       summary: "Umgebungseintrag ändern"
       description: ""
-      operationId: "updateUser"
+      operationId: "environmentUpdate"
       produces:
       - "application/json"
       parameters:
@@ -149,7 +149,7 @@ paths:
       - "environment"
       summary: "Umgebungseintrag löschen"
       description: ""
-      operationId: "deleteTemp"
+      operationId: "environmentDelete"
       produces:
       - "application/json"
       parameters:
