@@ -27,7 +27,7 @@ FILEPATH = "/home/pi/"
 @api_view(['GET'])
 def windowState(request):
     if request.method == 'GET':
-        snippet = Window.objects.order_by('-pub_date')[0]
+        snippet = Window.objects.order_by('-pubDate')[0]
         serializer = WindowSerializer(snippet)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -39,9 +39,9 @@ def tempList(request, key = None, format = None):
     if request.method == 'GET':
         location = request.query_params.get('location')
         if location != None:
-            snippets = Temperature.objects.filter(location=location).order_by('-pub_date')[:limit]
+            snippets = Temperature.objects.filter(location=location).order_by('-pubDate')[:limit]
         else:
-            snippets = Temperature.objects.order_by('-pub_date')[:limit]
+            snippets = Temperature.objects.order_by('-pubDate')[:limit]
 
         serializer = TemperatureSerializer(snippets, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -195,31 +195,5 @@ def windowProcess(action):
     r.setAction(action)
     r.run()
     return r.isRunning
-
-
-
-"""
-def info(request):
-    # tmp
-    all = Temperature.objects.all().order_by('-pub_date')
-    tempIn = Temperature.objects.filter(temp_type__lte='in').order_by('-pub_date')[0]
-    tempOut = Temperature.objects.filter(temp_type__lte='out').order_by('-pub_date')[0]
-
-    # windowState
-    windowState = "unknown"
-    f = open("%s./windowStatus" % FILEPATH, "r")
-    if f:
-        windowState = f.readline()
-        f.close()
-
-    context = {
-        'where' : id,
-        'entries': all,
-        'tempOut' : tempOut,
-        'tempIn' : tempIn,
-        'windowState': windowState
-    }
-    return render(request, 'templates/window/info.html', context)
-"""
 
 
