@@ -1,23 +1,44 @@
 from rest_framework import serializers
-#from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
-from .models import Temperature
+from .models import Temperature, Window
 
 class TemperatureSerializer(serializers.Serializer):
 
     class Meta:
         model = Temperature
-        fields = ('id', 'temp_value', 'temp_type')
-
+        fields = ('id', 'pub_date', 'location', 'temperature', 'humidity')
 
     id = serializers.IntegerField(read_only=True)
-    temp_value = serializers.CharField(required=False, allow_blank=True, max_length=50)
-    temp_type  = serializers.CharField(required=False, allow_blank=True, max_length=3)
+    pub_date = serializers.DateTimeField(required=False)
+
+    location = serializers.CharField(max_length = 3)
+
+    temperature = serializers.DecimalField(max_digits=5, decimal_places=2)
+    humidity = serializers.DecimalField(max_digits=5, decimal_places=2)
+
 
     def create(self, validated_data):
         return Temperature.objects.create(**validated_data)
 
 
     def update(self, instance, validated_data):
-        instance.temp_value = validated_data.get('temp_value', instance.temp_value)
+        instance.temperature = validated_data.get('temperature', instance.temperature)
+        instance.humidity = validated_data.get('humidity', instance.humidity)
         instance.save()
         return instance
+
+
+
+class WindowSerializer(serializers.Serializer):
+
+    class Meta:
+        model = Window
+        fields = ('id', 'pub_date', 'state')
+
+    id = serializers.IntegerField(read_only=True)
+    pub_date = serializers.DateTimeField(required=False)
+    state = serializers.CharField(max_length = 5)
+
+
+    def create(self, validated_data):
+        return Window.objects.create(**validated_data)
+

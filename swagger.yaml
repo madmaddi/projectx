@@ -88,7 +88,18 @@ paths:
             $ref: "#/definitions/TempList"
         404:
           description: "Not found."
-
+  /temp/measure:
+    get:
+      tags:
+        - "temp"
+      summary: "führt eine Messung durch (innen + aussen)"
+      operationId: "measure"
+      produces:
+      - "application/json"
+      - "application/html"
+      responses:
+        200:
+          description: "OK"
   /temp/{id}:
     get:
       tags:
@@ -160,9 +171,14 @@ definitions:
     properties:
       id:
         type: integer
-      temp_value:
+      pub_date:
+        type: "string"
+        format: "date-time"
+      location:
         type: string
-      temp_type:
+      temperature:
+        type: string
+      humidity:
         type: string
   WindowStatus:
     type: "object"

@@ -10,7 +10,7 @@ from relais.Relais import Relais
 import threading
 from Lock import *
 from django.utils import timezone
-from .models import Temperature
+from .models import Temperature, Window
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -20,20 +20,16 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 
-from .serializer import TemperatureSerializer
+from .serializer import TemperatureSerializer, WindowSerializer
 
 FILEPATH = "/home/pi/"
 
 @api_view(['GET'])
 def windowState(request):
-    # windowState
-    windowState = "unknown"
-    f = open("%s./windowStatus" % FILEPATH, "r")
-    if f:
-        windowState = f.readline()
-        f.close()
-
-    return Response({'state': windowState})
+    if request.method == 'GET':
+        snippet = Window.objects.order_by('-pub_date')[0]
+        serializer = WindowSerializer(snippet)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def tempList(request, key = None, format = None):
@@ -43,7 +39,7 @@ def tempList(request, key = None, format = None):
     if request.method == 'GET':
         location = request.query_params.get('location')
         if location != None:
-            snippets = Temperature.objects.filter(temp_type=location).order_by('-pub_date')[:limit]
+            snippets = Temperature.objects.filter(location=location).order_by('-pub_date')[:limit]
         else:
             snippets = Temperature.objects.order_by('-pub_date')[:limit]
 
@@ -62,7 +58,6 @@ def tempList(request, key = None, format = None):
 def tempDetail(request, key, format = None):
     try:
         snippet = Temperature.objects.get(id = key)
-        print snippet
     except Temperature.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -88,6 +83,7 @@ def action(request, action = "" ):
     if action == "":
         return Response({"status": "Fail, no action"})
 
+
     r = Relais(17, 22)
     isRunning = r.isRunning
 
@@ -105,6 +101,10 @@ def action(request, action = "" ):
             status=status.HTTP_503_SERVICE_UNAVAILABLE
         )
     else:
+        w = Window()
+        w.pub_date = timezone.now()
+        w.state = action
+        w.save()
         resp = Response(
                 {
                     "status": "OK",
@@ -121,12 +121,10 @@ def snippet_detail(request, pk, format = None):
         snippet = Temperature.objects.get(pk=pk)
     except Temperature.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-        #return HttpResponse(status=404)
 
     if request.method == 'GET':
         serializer = TemperatureSerializer(snippet)
         return Response(serializer.data)
-        #return JsonResponse(serializer.data)
 
     elif request.method == 'PUT':
         serializer = TemperatureSerializer(snippet, data=request.data)
@@ -154,15 +152,42 @@ def snippet_list(request, format = None):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-            #return JsonResponse(serializer.data, status=201)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        #return JsonResponse(serializer.errors, status=400)
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def measure(request):
+    sensorOut = Sensor(15, 'DHT22', False)
+    sensorOut.readTemp()
+
+    sensorIn = Sensor(14, 'DHT11', False)
+    sensorIn.readTemp()
+
+    tIn = Temperature()
+    tIn.pub_date = timezone.now()
+    tIn.location = "in"
+    tIn.temperature = sensorIn.getTemperature()
+    tIn.humidity = sensorIn.getHumidity()
+    tIn.save()
+
+    tOut = Temperature()
+    tOut.pub_date = timezone.now()
+    tOut.location = "out"
+    tOut.temperature = sensorOut.getTemperature()
+    tOut.humidity = sensorOut.getHumidity()
+    tOut.save()
+
+    snippets = [tIn, tOut] #Temperature.objects.all()
+    serializer = TemperatureSerializer(snippets, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    #return render(request, 'templates/window/measure.html', {})
 
 # Create your views here.
 def index(request):
     return ""
-    #return status(request, "", "")
+
 
 
 def windowProcess(action):
@@ -171,20 +196,7 @@ def windowProcess(action):
     r.run()
     return r.isRunning
 
-def measure(request):
-    sensorOut = Sensor(15, 'DHT22', False)
-    sensorOut.readTemp()
-    
-    sensorIn = Sensor(14, 'DHT11', False)
-    sensorIn.readTemp()
-    
-    tIn = Temperature(temp_value=sensorIn.getTemperature(),temp_type="in",pub_date=timezone.now())
-    tIn.save()
 
-    tOut = Temperature(temp_value=sensorOut.getTemperature(),temp_type="out",pub_date=timezone.now())
-    tOut.save()
-
-    return render(request, 'templates/window/measure.html', {})
 
 
 def info(request):
