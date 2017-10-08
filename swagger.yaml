@@ -25,6 +25,12 @@ paths:
       operationId: "windowInfo"
       produces:
       - "application/json"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Anzahl der Ergebnisse. Default = 1000"
+        required: false
+        type: integer
       responses:
         200:
           description: "OK"
@@ -78,7 +84,7 @@ paths:
           - "out"
       - name: "limit"
         in: "query"
-        description: "Anzahl der Ergebnisse. Default = 2000"
+        description: "Anzahl der Ergebnisse. Default = 1000"
         required: false
         type: integer
       responses:

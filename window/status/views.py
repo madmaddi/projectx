@@ -24,19 +24,22 @@ from .serializer import EnvironmentSerializer, WindowSerializer
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-FILEPATH = "/home/pi/"
+#FILEPATH = "/home/pi/"
+ENTRY_LIMIT = 1000
 
 @api_view(['GET'])
 def windowState(request):
     if request.method == 'GET':
-        snippet = Window.objects.order_by('-pubDate')[0]
-        serializer = WindowSerializer(snippet)
+        limit =  request.query_params.get('limit')
+        if limit == None or limit == "": limit = ENTRY_LIMIT
+        snippet = Window.objects.order_by('-pubDate')[:limit]
+        serializer = WindowSerializer(snippet, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def environmentList(request, key = None, format = None):
     limit =  request.query_params.get('limit')
-    if limit == None or limit == "": limit = 2000
+    if limit == None or limit == "": limit = ENTRY_LIMIT
 
     if request.method == 'GET':
         location = request.query_params.get('location')

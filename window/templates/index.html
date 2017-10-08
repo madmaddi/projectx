@@ -1090,7 +1090,7 @@ public class EnvironmentApiExample {
         
         EnvironmentApi apiInstance = new EnvironmentApi();
         String location = location_example; // String | Sensor innen oder außen
-        Integer limit = 56; // Integer | Anzahl der Ergebnisse. Default = 2000
+        Integer limit = 56; // Integer | Anzahl der Ergebnisse. Default = 1000
         try {
             EnvironList result = apiInstance.environmentInfo(location, limit);
             System.out.println(result);
@@ -1110,7 +1110,7 @@ public class EnvironmentApiExample {
     public static void main(String[] args) {
         EnvironmentApi apiInstance = new EnvironmentApi();
         String location = location_example; // String | Sensor innen oder außen
-        Integer limit = 56; // Integer | Anzahl der Ergebnisse. Default = 2000
+        Integer limit = 56; // Integer | Anzahl der Ergebnisse. Default = 1000
         try {
             EnvironList result = apiInstance.environmentInfo(location, limit);
             System.out.println(result);
@@ -1127,7 +1127,7 @@ public class EnvironmentApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Environment-environmentInfo-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *location = location_example; // Sensor innen oder außen (optional)
-Integer *limit = 56; // Anzahl der Ergebnisse. Default = 2000 (optional)
+Integer *limit = 56; // Anzahl der Ergebnisse. Default = 1000 (optional)
 
 EnvironmentApi *apiInstance = [[EnvironmentApi alloc] init];
 
@@ -1152,7 +1152,7 @@ var api = new ProjektX.EnvironmentApi()
 
 var opts = { 
   'location': location_example, // {String} Sensor innen oder außen
-  'limit': 56 // {Integer} Anzahl der Ergebnisse. Default = 2000
+  'limit': 56 // {Integer} Anzahl der Ergebnisse. Default = 1000
 };
 
 var callback = function(error, data, response) {
@@ -1185,7 +1185,7 @@ namespace Example
             
             var apiInstance = new EnvironmentApi();
             var location = location_example;  // String | Sensor innen oder außen (optional) 
-            var limit = 56;  // Integer | Anzahl der Ergebnisse. Default = 2000 (optional) 
+            var limit = 56;  // Integer | Anzahl der Ergebnisse. Default = 1000 (optional) 
 
             try
             {
@@ -1209,7 +1209,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\Api\EnvironmentApi();
 $location = location_example; // String | Sensor innen oder außen
-$limit = 56; // Integer | Anzahl der Ergebnisse. Default = 2000
+$limit = 56; // Integer | Anzahl der Ergebnisse. Default = 1000
 
 try {
     $result = $api_instance->environmentInfo($location, $limit);
@@ -1227,7 +1227,7 @@ use WWW::SwaggerClient::EnvironmentApi;
 
 my $api_instance = WWW::SwaggerClient::EnvironmentApi->new();
 my $location = location_example; # String | Sensor innen oder außen
-my $limit = 56; # Integer | Anzahl der Ergebnisse. Default = 2000
+my $limit = 56; # Integer | Anzahl der Ergebnisse. Default = 1000
 
 eval { 
     my $result = $api_instance->environmentInfo(location => $location, limit => $limit);
@@ -1248,7 +1248,7 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.EnvironmentApi()
 location = location_example # String | Sensor innen oder außen (optional)
-limit = 56 # Integer | Anzahl der Ergebnisse. Default = 2000 (optional)
+limit = 56 # Integer | Anzahl der Ergebnisse. Default = 1000 (optional)
 
 try: 
     # Umgebungs Infos
@@ -1303,7 +1303,7 @@ except ApiException as e:
                 </span>
 
                     <div class="inner description">
-                        Anzahl der Ergebnisse. Default &#x3D; 2000
+                        Anzahl der Ergebnisse. Default &#x3D; 1000
                     </div>
             </div>
         </div>
@@ -2502,7 +2502,7 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Window-windowInfo-0-curl">
-                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "http://192.168.20.226:8888/projectx/window"</code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET "http://192.168.20.226:8888/projectx/window?limit="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Window-windowInfo-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2518,8 +2518,9 @@ public class WindowApiExample {
     public static void main(String[] args) {
         
         WindowApi apiInstance = new WindowApi();
+        Integer limit = 56; // Integer | Anzahl der Ergebnisse. Default = 1000
         try {
-            apiInstance.windowInfo();
+            apiInstance.windowInfo(limit);
         } catch (ApiException e) {
             System.err.println("Exception when calling WindowApi#windowInfo");
             e.printStackTrace();
@@ -2535,8 +2536,9 @@ public class WindowApiExample {
 
     public static void main(String[] args) {
         WindowApi apiInstance = new WindowApi();
+        Integer limit = 56; // Integer | Anzahl der Ergebnisse. Default = 1000
         try {
-            apiInstance.windowInfo();
+            apiInstance.windowInfo(limit);
         } catch (ApiException e) {
             System.err.println("Exception when calling WindowApi#windowInfo");
             e.printStackTrace();
@@ -2549,12 +2551,13 @@ public class WindowApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Window-windowInfo-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Integer *limit = 56; // Anzahl der Ergebnisse. Default = 1000 (optional)
+
 WindowApi *apiInstance = [[WindowApi alloc] init];
 
 // Info zum Fensterstatus
-[apiInstance windowInfoWithCompletionHandler: 
-              ^(NSError* error) {
+[apiInstance windowInfoWith:limit
+              completionHandler: ^(NSError* error) {
                             if (error) {
                                 NSLog(@"Error: %@", error);
                             }
@@ -2567,6 +2570,10 @@ WindowApi *apiInstance = [[WindowApi alloc] init];
 
 var api = new ProjektX.WindowApi()
 
+var opts = { 
+  'limit': 56 // {Integer} Anzahl der Ergebnisse. Default = 1000
+};
+
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -2574,7 +2581,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully.');
   }
 };
-api.windowInfo(callback);
+api.windowInfo(opts, callback);
 </code></pre>
                             </div>
 
@@ -2596,11 +2603,12 @@ namespace Example
         {
             
             var apiInstance = new WindowApi();
+            var limit = 56;  // Integer | Anzahl der Ergebnisse. Default = 1000 (optional) 
 
             try
             {
                 // Info zum Fensterstatus
-                apiInstance.windowInfo();
+                apiInstance.windowInfo(limit);
             }
             catch (Exception e)
             {
@@ -2617,9 +2625,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\Api\WindowApi();
+$limit = 56; // Integer | Anzahl der Ergebnisse. Default = 1000
 
 try {
-    $api_instance->windowInfo();
+    $api_instance->windowInfo($limit);
 } catch (Exception $e) {
     echo 'Exception when calling WindowApi->windowInfo: ', $e->getMessage(), PHP_EOL;
 }
@@ -2632,9 +2641,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::WindowApi;
 
 my $api_instance = WWW::SwaggerClient::WindowApi->new();
+my $limit = 56; # Integer | Anzahl der Ergebnisse. Default = 1000
 
 eval { 
-    $api_instance->windowInfo();
+    $api_instance->windowInfo(limit => $limit);
 };
 if ($@) {
     warn "Exception when calling WindowApi->windowInfo: $@\n";
@@ -2650,10 +2660,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.WindowApi()
+limit = 56 # Integer | Anzahl der Ergebnisse. Default = 1000 (optional)
 
 try: 
     # Info zum Fensterstatus
-    api_instance.window_info()
+    api_instance.window_info(limit=limit)
 except ApiException as e:
     print("Exception when calling WindowApi->windowInfo: %s\n" % e)</code></pre>
                             </div>
@@ -2665,6 +2676,33 @@ except ApiException as e:
 
 
 
+                            <div class="methodsubtabletitle">Query parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">limit</td>
+<td>
+
+
+    <div id="d2e199_windowInfo_limit">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+                    <div class="inner description">
+                        Anzahl der Ergebnisse. Default &#x3D; 1000
+                    </div>
+            </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
 
                           <h2>Responses</h2>
                             <h3> Status: 200 - OK </h3>
@@ -2692,7 +2730,7 @@ except ApiException as e:
           </div>
           <div id="generator">
             <div class="content">
-              Generated 2017-10-08T20:59:56.292Z
+              Generated 2017-10-08T22:00:10.145Z
             </div>
           </div>
       </div>
