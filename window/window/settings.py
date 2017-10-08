@@ -12,13 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-# https://stackoverflow.com/a/8675228
-# Find templates in the same folder as settings.py.
-SETTINGS_PATH = os.path.realpath(os.path.dirname(__file__))
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -27,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '=ht7+#@8*71kf3a)o3pdw4e6ic6b&%n4j%+hj+(0nj3%!tiw!g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -60,7 +55,10 @@ ROOT_URLCONF = 'window.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['.'],
+        'DIRS': [
+                '.',
+                BASE_DIR + '/templates',                 
+                ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

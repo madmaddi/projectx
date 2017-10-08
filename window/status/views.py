@@ -184,12 +184,10 @@ def measure(request):
     serializer = EnvironmentSerializer(snippets, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
-    #return render(request, 'templates/window/measure.html', {})
 
 # Create your views here.
 def index(request):
-    i =0
-    return render(request, 'django/projectx/window/templates/index.html', {})
+    return render(request, '/home/pi/django/projectx/window/templates/index.html', {})
 
 def windowProcess(action):
     r = Relais(17, 22)
