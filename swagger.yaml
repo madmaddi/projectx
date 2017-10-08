@@ -1,0 +1,189 @@
+swagger: "2.0"
+info:
+  description: "Projekt-X"
+  version: "1.0.0"
+  title: "Projekt-X"
+  license:
+    name: "Namensnennung-Nicht kommerziell 4.0 International"
+    url: "http://creativecommons.org/licenses/by-nc/4.0/"
+host: "192.168.20.226:8888"
+basePath: "/projectx"
+tags:
+- name: "window"
+  description: "Infos über den Fensterstatus"
+- name: "environment"
+  description: "Temperatur + Luftfeuchteinfos, drinnen + draussen"
+schemes:
+- "http"
+paths:
+  /window:
+    get:
+      tags:
+      - "window"
+      summary: "Info zum Fensterstatus"
+      description: ""
+      operationId: "windowInfo"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "OK"
+  /window/{action}:
+    get:
+      tags:
+      - "window"
+      summary: "Führt Fensteraktion aus"
+      description: "Mögliche Aktionen: open|close. Wird bereits eine Fensteraktion ausgeführt, hat die Anfrage keinen Effekt."
+      operationId: "windowAction"
+      produces:
+      - "application/json"
+      - "application/html"
+      parameters:
+      - name: "action"
+        in: "path"
+        description: "Durchzuführende Aktion"
+        required: true
+        type: "string"
+        enum:
+          - "open"
+          - "close"
+      responses:
+        200:
+          description: "Aktion wird durchgeführt."
+          schema:
+            $ref: "#/definitions/WindowStatus"
+        503:
+          description: "Service belegt."
+          schema:
+            $ref: "#/definitions/WindowStatus"
+
+  /environment:
+    get:
+      tags:
+      - "environment"
+      summary: "Umgebungs Infos"
+      description: "Liefert alle gespeicherten Umgebungseinträge zurück. Limitierung via limit Parameter. Bsp: ./?limit=1&location=in liefert die aktuellen Infos zur Innenumgebung"
+      operationId: "environmentInfo"
+      produces:
+      - "application/json"
+      - "application/html"
+      parameters:
+      - name: "location"
+        in: "query"
+        description: "Sensor innen oder außen"
+        required: false
+        type: "string"
+        enum:
+          - "in"
+          - "out"
+      - name: "limit"
+        in: "query"
+        description: "Anzahl der Ergebnisse. Default = 2000"
+        required: false
+        type: integer
+      responses:
+        200:
+          description: "Aktion wird durchgeführt."
+          schema:
+            $ref: "#/definitions/EnvironList"
+        404:
+          description: "Not found."
+  /environment/measure:
+    get:
+      tags:
+        - "environment"
+      summary: "führt eine Umgebungsmessung durch (innen + aussen)"
+      operationId: "environmentMeasure"
+      produces:
+      - "application/json"
+      - "application/html"
+      responses:
+        200:
+          description: "OK"
+  /environment/{id}:
+    get:
+      tags:
+      - "environment"
+      summary: "Umgebungs Infos"
+      description: "Liefert Infos zum konkreten Umgebungseintrag zurück."
+      operationId: "environmentInfoId"
+      produces:
+      - "application/json"
+      - "application/html"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: ""
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Not found."
+    put:
+      tags:
+      - "environment"
+      summary: "Umgebungseintrag ändern"
+      description: ""
+      operationId: "environmentUpdate"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID des Eintrags"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated object"
+        required: true
+        schema:
+          $ref: "#/definitions/Environ"
+      responses:
+        200:
+          description: "OK"
+    delete:
+      tags:
+      - "environment"
+      summary: "Umgebungseintrag löschen"
+      description: ""
+      operationId: "environmentDelete"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Zu löschende ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+definitions:
+  EnvironList:
+    type: "array"
+    items:
+     $ref: "#/definitions/Environ"
+  Environ:
+    type: "object"
+    properties:
+      id:
+        type: integer
+      pubDate:
+        type: "string"
+        format: "date-time"
+      location:
+        type: string
+      temperature:
+        type: string
+      humidity:
+        type: string
+  WindowStatus:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+      msg:
+        type: "string"

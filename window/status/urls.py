@@ -2,13 +2,18 @@ from django.conf.urls import url
 
 from . import views
 
+from rest_framework.urlpatterns import format_suffix_patterns
+
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^temp/(?P<id>[in|out]+)/$', views.status, name='statusTemp'),
-    url(r'^temp/(?P<id>[in|out]+)/window/(?P<action>[open|close]+)/$', views.status, name='actionWindow'),
-    #url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
-    # ex: /polls/5/results/
-    #url(r'^(?P<question_id>[0-9]+)/results/$', views.results, name='results'),
-    # ex: /polls/5/vote/
-    #url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
+
+    url(r'^environment$', views.environmentList, name='temp'),
+    url(r'^environment/measure$', views.measure, name='measure'),
+    url(r'^environment/(?P<key>[0-9]+)$', views.environmentDetail, name='temp'),
+
+    url(r'^window$', views.windowState, name='windowStatus'),
+    url(r'^window/(?P<action>[open|close]+)$', views.action, name='actionWindow'),
+
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
