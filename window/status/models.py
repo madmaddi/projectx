@@ -11,6 +11,12 @@ class Temperature(models.Model):
     temperature = models.FloatField()
     humidity = models.FloatField()
 
+class Environment(models.Model):
+    pubDate = models.DateTimeField('date published')
+    location = models.CharField(max_length=3)
+    temperature = models.FloatField()
+    humidity = models.FloatField()
+
 
 class Window(models.Model):
     pubDate = models.DateTimeField('date published')

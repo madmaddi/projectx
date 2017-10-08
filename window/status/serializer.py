@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import Temperature, Window
+from .models import Environment, Window
 
-class TemperatureSerializer(serializers.Serializer):
+class EnvironmentSerializer(serializers.Serializer):
 
     class Meta:
-        model = Temperature
+        model = Environment
         fields = ('id', 'pubDate', 'location', 'temperature', 'humidity')
 
     id = serializers.IntegerField(read_only=True)

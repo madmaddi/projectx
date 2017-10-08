@@ -19,8 +19,6 @@ class Singleton(type):
 class Relais(object):
     __metaclass__ = Singleton
 
-    FILEPATH = "/home/pi/"
-
     pin1 = 17
     pin2 = 22
     delay = 5
@@ -66,32 +64,20 @@ class Relais(object):
             GPIO.output(p, True)  # connect through
             time.sleep(self.delay)  # wait n seconds
             GPIO.output(p, False)  # stop circuit connection
-            self.writeStatus(p)
         except KeyboardInterrupt:
             raise
         except:
             GPIO.output(p, False)
             self.isRunning = False
 
-
         GPIO.output(p, False)
         self.isRunning = False
-
-    def writeStatus(self, p):
-        path = "%s./windowStatus" % self.FILEPATH
-        print path
-        f = open(path, "w")
-        status = "closed"
-        if ( p == 17): status = "open" # todo p == 17 not hardcoded
-        f.write(status)
-        f.close()
 
     def stopAll(self):
         try:
             # stop circuit connection
             GPIO.output(self.pin1, False)
             GPIO.output(self.pin2, False)
-            #time.sleep(self.delay/100)
         except:
             import sys
             sys.exit(1)
@@ -109,11 +95,3 @@ if __name__ == '__main__':
 
     r = Relais(17, 22, arg1)
     r.start()
-    """
-    l =[]
-    for i in range(1,11):
-        l.append(Relais(17, 22, lock,  i))
-
-    for r in l:
-        r.start()
-    """
