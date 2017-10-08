@@ -103,10 +103,10 @@ paths:
   /environment/{id}:
     get:
       tags:
-      - "environmentId"
+      - "environment"
       summary: "Umgebungs Infos"
       description: "Liefert Infos zum konkreten Umgebungseintrag zurück."
-      operationId: "tempInfoId"
+      operationId: "environmentInfoId"
       produces:
       - "application/json"
       - "application/html"
