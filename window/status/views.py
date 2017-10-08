@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.http import HttpResponse
-#from django.template import loader
 from django.shortcuts import render
 
 from sensor.DHTSensor import DHTSensor as Sensor
@@ -21,6 +20,9 @@ from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 
 from .serializer import EnvironmentSerializer, WindowSerializer
+
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 FILEPATH = "/home/pi/"
 
@@ -158,10 +160,10 @@ def snippet_list(request, format = None):
 
 @api_view(['GET'])
 def measure(request):
-    sensorOut = Sensor(15, 'DHT22', False)
+    sensorOut = Sensor(14, 'DHT11', False)
     sensorOut.readTemp()
 
-    sensorIn = Sensor(14, 'DHT11', False)
+    sensorIn = Sensor(15, 'DHT22', False)
     sensorIn.readTemp()
 
     tIn = Environment()
@@ -186,9 +188,8 @@ def measure(request):
 
 # Create your views here.
 def index(request):
-    return "hiuer die doku"
-
-
+    i =0
+    return render(request, 'django/projectx/window/templates/index.html', {})
 
 def windowProcess(action):
     r = Relais(17, 22)
