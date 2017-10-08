@@ -5,10 +5,10 @@ class TemperatureSerializer(serializers.Serializer):
 
     class Meta:
         model = Temperature
-        fields = ('id', 'pub_date', 'location', 'temperature', 'humidity')
+        fields = ('id', 'pubDate', 'location', 'temperature', 'humidity')
 
     id = serializers.IntegerField(read_only=True)
-    pub_date = serializers.DateTimeField(required=False)
+    pubDate = serializers.DateTimeField(required=False)
 
     location = serializers.CharField(max_length = 3)
 
@@ -32,10 +32,10 @@ class WindowSerializer(serializers.Serializer):
 
     class Meta:
         model = Window
-        fields = ('id', 'pub_date', 'state')
+        fields = ('id', 'pubDate', 'state')
 
     id = serializers.IntegerField(read_only=True)
-    pub_date = serializers.DateTimeField(required=False)
+    pubDate = serializers.DateTimeField(required=False)
     state = serializers.CharField(max_length = 5)
 
 

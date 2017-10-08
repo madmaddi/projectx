@@ -6,12 +6,12 @@ from django.db import models
 # Create your models here.
 
 class Temperature(models.Model):
-    pub_date = models.DateTimeField('date published')
+    pubDate = models.DateTimeField('date published')
     location = models.CharField(max_length=3)
     temperature = models.FloatField()
     humidity = models.FloatField()
 
 
 class Window(models.Model):
-    pub_date = models.DateTimeField('date published')
+    pubDate = models.DateTimeField('date published')
     state = models.CharField(max_length=5)

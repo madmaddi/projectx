@@ -11,8 +11,8 @@ basePath: "/projectx"
 tags:
 - name: "window"
   description: "Infos über den Fensterstatus"
-- name: "temp"
-  description: "Temperaturinfos, drinnen + draussen"
+- name: "environment"
+  description: "Temperatur + Luftfeuchteinfos, drinnen + draussen"
 schemes:
 - "http"
 paths:
@@ -57,12 +57,12 @@ paths:
           schema:
             $ref: "#/definitions/WindowStatus"
 
-  /temp:
+  /environment:
     get:
       tags:
-      - "temp"
-      summary: "Temperatur Infos"
-      description: "Liefert Liste gespeicherter Temperatureinträge zurück. (alle!) "
+      - "environment"
+      summary: "Umgebungs Infos"
+      description: "Liefert alle gespeicherten Umgebungseinträge zurück. Limitierung via limit Parameter. Bsp: ./?limit=1&location=in liefert die aktuellen Infos zur Innenumgebung"
       operationId: "tempInfo"
       produces:
       - "application/json"
@@ -85,14 +85,14 @@ paths:
         200:
           description: "Aktion wird durchgeführt."
           schema:
-            $ref: "#/definitions/TempList"
+            $ref: "#/definitions/EnvironList"
         404:
           description: "Not found."
-  /temp/measure:
+  /environment/measure:
     get:
       tags:
-        - "temp"
-      summary: "führt eine Messung durch (innen + aussen)"
+        - "environment"
+      summary: "führt eine Umgebungsmessung durch (innen + aussen)"
       operationId: "measure"
       produces:
       - "application/json"
@@ -100,12 +100,12 @@ paths:
       responses:
         200:
           description: "OK"
-  /temp/{id}:
+  /environment/{id}:
     get:
       tags:
-      - "temp"
-      summary: "Temperatur Infos"
-      description: "Liefert Infos zum konkreten Temperatureintrag zurück."
+      - "environment"
+      summary: "Umgebungs Infos"
+      description: "Liefert Infos zum konkreten Umgebungseintrag zurück."
       operationId: "tempInfoId"
       produces:
       - "application/json"
@@ -123,8 +123,8 @@ paths:
           description: "Not found."
     put:
       tags:
-      - "temp"
-      summary: "Temperatureintrag ändern"
+      - "environment"
+      summary: "Umgebungseintrag ändern"
       description: ""
       operationId: "updateUser"
       produces:
@@ -140,14 +140,14 @@ paths:
         description: "Updated object"
         required: true
         schema:
-          $ref: "#/definitions/Temperatur"
+          $ref: "#/definitions/Environ"
       responses:
         200:
           description: "OK"
     delete:
       tags:
-      - "temp"
-      summary: "Temperatureintrag löschen"
+      - "environment"
+      summary: "Umgebungseintrag löschen"
       description: ""
       operationId: "deleteTemp"
       produces:
@@ -162,16 +162,16 @@ paths:
         200:
           description: "OK"
 definitions:
-  TempList:
+  EnvironList:
     type: "array"
     items:
-     $ref: "#/definitions/Temperatur"
-  Temperatur:
+     $ref: "#/definitions/Environ"
+  Environ:
     type: "object"
     properties:
       id:
         type: integer
-      pub_date:
+      pubDate:
         type: "string"
         format: "date-time"
       location:

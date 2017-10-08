@@ -102,7 +102,7 @@ def action(request, action = "" ):
         )
     else:
         w = Window()
-        w.pub_date = timezone.now()
+        w.pubDate = timezone.now()
         w.state = action
         w.save()
         resp = Response(
@@ -114,7 +114,7 @@ def action(request, action = "" ):
 
     return resp
 
-
+"""
 @api_view(['GET', 'PUT', 'DELETE'])
 def snippet_detail(request, pk, format = None):
     try:
@@ -154,7 +154,7 @@ def snippet_list(request, format = None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+"""
 
 @api_view(['GET'])
 def measure(request):
@@ -165,14 +165,14 @@ def measure(request):
     sensorIn.readTemp()
 
     tIn = Temperature()
-    tIn.pub_date = timezone.now()
+    tIn.pubDate = timezone.now()
     tIn.location = "in"
     tIn.temperature = sensorIn.getTemperature()
     tIn.humidity = sensorIn.getHumidity()
     tIn.save()
 
     tOut = Temperature()
-    tOut.pub_date = timezone.now()
+    tOut.pubDate = timezone.now()
     tOut.location = "out"
     tOut.temperature = sensorOut.getTemperature()
     tOut.humidity = sensorOut.getHumidity()
@@ -186,7 +186,7 @@ def measure(request):
 
 # Create your views here.
 def index(request):
-    return ""
+    return "hiuer die doku"
 
 
 
@@ -198,7 +198,7 @@ def windowProcess(action):
 
 
 
-
+"""
 def info(request):
     # tmp
     all = Temperature.objects.all().order_by('-pub_date')
@@ -220,6 +220,6 @@ def info(request):
         'windowState': windowState
     }
     return render(request, 'templates/window/info.html', context)
-    
+"""
 
 
