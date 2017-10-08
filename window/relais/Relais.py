@@ -29,7 +29,7 @@ class Relais(object):
     action = "open"
     isRunning = False
 
-    def __init__(self, pin1, pin2, delay = 10):
+    def __init__(self, pin1, pin2, delay = 30):
         if pin1 is None or pin2 is None:
             raise Exception('Pin required')
 
