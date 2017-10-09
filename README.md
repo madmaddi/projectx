@@ -2,7 +2,6 @@
 
 ## Install
 
-
 ### Python Virtualenv
 '''
 python virtualenv
@@ -28,4 +27,9 @@ pip install RPi.GPIO
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 
 python setup.py install
+'''
+
+## Raspberry WLAN
+'''
+nano /etc/wpa_supplicant/wpa_supplicant.conf
 '''
