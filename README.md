@@ -29,7 +29,11 @@ git clone https://github.com/adafruit/Adafruit_Python_DHT.git
 python setup.py install
 ```
 
+### GPIO as non Root
+...
+
 ## Raspberry WLAN
 ```
 nano /etc/wpa_supplicant/wpa_supplicant.conf
 ```
+

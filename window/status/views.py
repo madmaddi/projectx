@@ -30,9 +30,15 @@ ENTRY_LIMIT = 1000
 @api_view(['GET'])
 def windowState(request):
     if request.method == 'GET':
-        limit =  request.query_params.get('limit')
+        limit = request.query_params.get('limit')
         if limit == None or limit == "": limit = ENTRY_LIMIT
-        snippet = Window.objects.order_by('-pubDate')[:limit]
+
+        state = request.query_params.get('state')
+        if state != None:
+            snippet = Window.objects.filter(state=state).order_by('-pubDate')[:limit]
+        else:
+            snippet = Window.objects.order_by('-pubDate')[:limit]
+
         serializer = WindowSerializer(snippet, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
