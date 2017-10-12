@@ -30,8 +30,10 @@ python setup.py install
 ```
 
 ### GPIO as non Root
-...
-
+```
+chown root.gpio /dev/gpiomem
+chmod g+rw /dev/gpiomem
+```
 ## Raspberry WLAN
 ```
 nano /etc/wpa_supplicant/wpa_supplicant.conf
