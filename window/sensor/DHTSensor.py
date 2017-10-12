@@ -4,7 +4,6 @@
 import Adafruit_DHT
 
 class DHTSensor(object):
-    FILEPATH = "/home/pi/"
     allowedSensorTypes  = ['DHT11', 'DHT22']
     sensorType          = 'DHT11'
     pin                 = 14

@@ -7,7 +7,7 @@ from django.shortcuts import render
 from sensor.DHTSensor import DHTSensor as Sensor
 from relais.Relais import Relais
 import threading
-from Lock import *
+#from Lock import *
 from django.utils import timezone
 from .models import Environment, Window
 
@@ -24,8 +24,7 @@ from .serializer import EnvironmentSerializer, WindowSerializer
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-#FILEPATH = "/home/pi/"
-ENTRY_LIMIT = 1000
+from config import *
 
 @api_view(['GET'])
 def windowState(request):
@@ -95,7 +94,7 @@ def action(request, action = "" ):
         return Response({"status": "Fail, no action"})
 
 
-    r = Relais(17, 22)
+    r = Relais(RELAIS_1_PIN, RELAIS_2_PIN)
     isRunning = r.isRunning
 
     # relais
@@ -125,54 +124,13 @@ def action(request, action = "" ):
 
     return resp
 
-"""
-@api_view(['GET', 'PUT', 'DELETE'])
-def snippet_detail(request, pk, format = None):
-    try:
-        snippet = Temperature.objects.get(pk=pk)
-    except Temperature.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = TemperatureSerializer(snippet)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = TemperatureSerializer(snippet, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-@api_view(['GET', 'POST'])
-def snippet_list(request, format = None):
-    if request.method == 'GET':
-        snippets = Temperature.objects.all()
-        serializer = TemperatureSerializer(snippets, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = TemperatureSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-"""
 
 @api_view(['GET'])
 def measure(request):
-    sensorOut = Sensor(14, 'DHT11', False)
+    sensorOut = Sensor(SENSOR_OUT_PIN, SENSOR_OUT_TYPE, SENSOR_DEBUG)
     sensorOut.readTemp()
 
-    sensorIn = Sensor(15, 'DHT22', False)
+    sensorIn = Sensor(SENSOR_IN_PIN, SENSOR_IN_TYPE, SENSOR_DEBUG)
     sensorIn.readTemp()
 
     tIn = Environment()
@@ -198,8 +156,9 @@ def measure(request):
 def index(request):
     return render(request, '/home/pi/django/projectx/window/templates/index.html', {})
 
+# relais thread target
 def windowProcess(action):
-    r = Relais(17, 22)
+    r = Relais(RELAIS_1_PIN, RELAIS_2_PIN)
     r.setAction(action)
     r.run()
     return r.isRunning
