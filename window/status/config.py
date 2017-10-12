@@ -1,0 +1,22 @@
+#!/usr/bin/python
+# coding=utf-8
+
+ENTRY_LIMIT = 1000
+
+"""
+SENSOR
+"""
+SENSOR_DEBUG    = False
+
+SENSOR_IN_PIN   = 15
+SENSOR_IN_TYPE  = 'DHT22' 
+
+SENSOR_OUT_PIN  = 14
+SENSOR_OUT_TYPE = 'DHT11'
+
+"""
+RELAIS
+"""
+RELAIS_1_PIN    = 17
+RELAIS_2_PIN    = 22
+
