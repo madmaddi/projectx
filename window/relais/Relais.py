@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 import time
 
 from status.Singleton import Singleton
+from status.config import OPEN_CLOSE_TIME
 
 class Relais(object):
     __metaclass__ = Singleton
@@ -17,7 +18,7 @@ class Relais(object):
     action = "open"
     isRunning = False
 
-    def __init__(self, pin1, pin2, delay = 30):
+    def __init__(self, pin1, pin2, delay = OPEN_CLOSE_TIME):
         if pin1 is None or pin2 is None:
             raise Exception('Pin required')
 
