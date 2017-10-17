@@ -1,0 +1,1 @@
+/home/pi/startProjectx.sh
