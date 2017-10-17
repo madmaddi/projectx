@@ -6,7 +6,7 @@ info:
   license:
     name: "Namensnennung-Nicht kommerziell 4.0 International"
     url: "http://creativecommons.org/licenses/by-nc/4.0/"
-host: "192.168.20.226:8888"
+host: "192.168.20.226"
 basePath: "/"
 tags:
 - name: "window"
